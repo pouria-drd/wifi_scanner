@@ -53,7 +53,7 @@ pip install -r requirements.txt
 ## 🧪 Usage
 
 ```bash
-python cli/main.py
+python -m cli.main
 ```
 
 > 💡 Tip: To improve detection, ping your subnet range before scanning:
