@@ -7,36 +7,12 @@ from rich.console import Console
 console = Console()
 
 
-
 import scapy.all as scapy
 import socket
 import re
 from rich.console import Console
 
 console = Console()
-
-def scapy_scan(ip_range: str):
-    ip_pattern = re.compile(r"^(?:[0-9]{1,3}\.){3}[0-9]{1,3}/[0-9]+$")
-    if not ip_pattern.match(ip_range):
-        console.print(f"[red]Invalid IP range: {ip_range}[/red]")
-        return []
-
-    try:
-        answered, _ = scapy.arping(ip_range, verbose=False)
-    except Exception as e:
-        console.print(f"[red]ARP Scan Error: {e}[/red]")
-        return []
-
-    devices = []
-    for _, recv in answered:
-        ip = recv.psrc
-        mac = recv.hwsrc
-        try:
-            hostname = socket.gethostbyaddr(ip)[0]
-        except:
-            hostname = "Unknown"
-        devices.append({"ip": ip, "mac": mac, "hostname": hostname})
-    return devices
 
 
 def scapy_scan(ip_range: str):

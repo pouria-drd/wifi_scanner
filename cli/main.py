@@ -6,9 +6,8 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from rich.console import Console
 from rich.table import Table
 
-from utils.ping import ping
 from scanner import scapy_scan
-from utils import save_scan_to_json
+from utils import ping, save_scan_to_json
 from parse_arguments import parse_arguments
 
 
@@ -18,7 +17,7 @@ def main():
 
     console.print(f"[bold green]🔍 Wi-Fi Device Scanner By Pouria Darandi[/bold green]")
     console.print(f"📡 Starting scan on IP range: [cyan]{args.range}[/cyan]\n")
-    
+
     devices = scapy_scan(args.range)
 
     for device in devices:
