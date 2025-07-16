@@ -38,9 +38,9 @@ wifi_scanner/
 
 ## ✅ Requirements
 
--   Python 3.x
 -   pip
--   Windows OS
+-   Python 3.x
+-   npcap (Download from [here](https://npcap.com/#download))
 
 ## 🔧 Installation
 

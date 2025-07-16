@@ -3,29 +3,40 @@ import sys
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
-from rich.table import Table
 from rich.console import Console
-from scanner.vendor_lookup import get_vendor
-from scanner.network_scanner import get_arp_table
+from rich.table import Table
+
+from utils.ping import ping
+from scanner import scapy_scan
+from utils import save_scan_to_json
+from parse_arguments import parse_arguments
 
 
 def main():
     console = Console()
-    console.print("[bold green]🔍 Wi-Fi Device Scanner[/bold green]")
+    args = parse_arguments()
 
-    devices = get_arp_table()
+    console.print(f"[bold green]🔍 Wi-Fi Device Scanner By Pouria Darandi[/bold green]")
+    console.print(f"📡 Starting scan on IP range: [cyan]{args.range}[/cyan]\n")
+    
+    devices = scapy_scan(args.range)
+
+    for device in devices:
+        device["online"] = "Yes" if args.ping and ping(device["ip"]) else "Unknown"
 
     table = Table(title="Connected Devices")
     table.add_column("IP", style="cyan")
     table.add_column("MAC", style="magenta")
-    table.add_column("Vendor", style="green")
+    table.add_column("Hostname", style="green")
+    table.add_column("Online", style="yellow")
 
-    for device in devices:
-        mac = device["mac"]
-        vendor = get_vendor(mac)
-        table.add_row(device["ip"], mac, vendor)
+    for d in devices:
+        table.add_row(d["ip"], d["mac"], d.get("hostname", "Unknown"), d["online"])
 
     console.print(table)
+
+    if args.output and args.output.endswith(".json"):
+        save_scan_to_json(devices, args.range, args.output)
 
 
 if __name__ == "__main__":
